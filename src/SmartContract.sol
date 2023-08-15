@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts@4.9.3/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts@4.9.3/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts@4.9.3/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts@4.9.3/access/Ownable.sol";
-import "@openzeppelin/contracts@4.9.3/utils/Counters.sol";
+// import "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+
+import "@openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin-contracts/contracts/access/Ownable.sol";
+import "@openzeppelin-contracts/contracts/utils/Counters.sol";
 import "./IERC4907.sol";
 
 contract MyToken is IERC4907, ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
