@@ -14,8 +14,15 @@ contract TestMarketPlace is Test{
     function testCreateToken() public{
         vm.prank(address(1));
         marketplace.createToken("tokenUri",0.01 ether);
-        marketplace._tokenIds();
-        assertEq(marketplace._tokenIds(),1);
+        vm.prank(address(2));
+        marketplace.createToken("tokenUri",0.01 ether);
+        assertEq(marketplace._tokenIds(),2);
+        assertEq(marketplace.idToListedToken[1].owner,address(1));
+    }
+
+    function testFailLowListPrice() public{
+        vm.prank(address(1));
+        marketplace.createToken("tokenUri",0.001 ether);
 
     }
 
