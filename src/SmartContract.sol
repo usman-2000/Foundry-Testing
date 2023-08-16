@@ -17,32 +17,31 @@ contract MyToken is IERC4907, ERC721, ERC721Enumerable, ERC721URIStorage, Ownabl
 
     constructor() ERC721("MyToken", "MTK") {}
 
-    mapping(uint256=>UserInfo) public _users;
+    mapping(uint256 => UserInfo) public _users;
 
-    struct UserInfo{
+    struct UserInfo {
         address user;
         uint64 expires;
     }
 
-    function setUser(uint256 tokenId,address user,uint64 expires) public virtual override {
-        require(_isApprovedOrOwner(msg.sender,tokenId),"ERC:721 Transfer is not A caller Nor Approved");
-        UserInfo storage Info=_users[tokenId];
-        Info.user=user;
-        Info.expires=expires;
+    function setUser(uint256 tokenId, address user, uint64 expires) public virtual override {
+        require(_isApprovedOrOwner(msg.sender, tokenId), "ERC:721 Transfer is not A caller Nor Approved");
+        UserInfo storage Info = _users[tokenId];
+        Info.user = user;
+        Info.expires = expires;
     }
 
-    function userOf(uint256 tokenId) public view  virtual  override returns(address){
-        if(uint256(_users[tokenId].expires)>=block.timestamp){
+    function userOf(uint256 tokenId) public view virtual override returns (address) {
+        if (uint256(_users[tokenId].expires) >= block.timestamp) {
             return _users[tokenId].user;
-        }else{
+        } else {
             return address(0);
         }
     }
 
-    function userExpires(uint256 tokenId) public view virtual override returns (uint256){
+    function userExpires(uint256 tokenId) public view virtual override returns (uint256) {
         return _users[tokenId].expires;
     }
-
 
     function safeMint(address to, string memory uri) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
@@ -58,7 +57,7 @@ contract MyToken is IERC4907, ERC721, ERC721Enumerable, ERC721URIStorage, Ownabl
         override(ERC721, ERC721Enumerable)
     {
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
-          if (from != to && _users[tokenId].user != address(0)) {
+        if (from != to && _users[tokenId].user != address(0)) {
             delete _users[tokenId];
             emit UpdateUser(tokenId, address(0), 0);
         }
@@ -68,12 +67,7 @@ contract MyToken is IERC4907, ERC721, ERC721Enumerable, ERC721URIStorage, Ownabl
         super._burn(tokenId);
     }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
+    function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }
 
@@ -85,5 +79,4 @@ contract MyToken is IERC4907, ERC721, ERC721Enumerable, ERC721URIStorage, Ownabl
     {
         return super.supportsInterface(interfaceId);
     }
-    
 }
