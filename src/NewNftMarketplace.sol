@@ -15,7 +15,7 @@ struct NFTListing {
 contract NFTMarket is ERC721URIStorage, Ownable {
   using Counters for Counters.Counter;
   using SafeMath for uint256;
-  Counters.Counter private _tokenIDs;
+  Counters.Counter public _tokenIDs;
   mapping(uint256 => NFTListing) private _listings;
 
   // if tokenURI is not an empty string => an NFT was created
