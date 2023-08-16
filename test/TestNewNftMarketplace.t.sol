@@ -12,6 +12,17 @@ contract TestNFTMarket is Test{
     }
 
     function testCreatingToken() public{
-        
+        vm.prank(address(1));
+        nftmarket.createNFT("TokenUri");
+        vm.prank(address(1));
+        nftmarket.listNFT(1,1 ether);
+        assertEq(nftmarket._tokenIDs(),1);
+        vm.prank(address(2));
+        nftmarket.createNFT("TokenUri1");
+        assertEq(nftmarket._tokenIDs(),2);
+        vm.deal(address(3),2 ether);
+        vm.prank(address(3));
+        nftmarket.buyNFT{value : 1 ether}(1);
+        assertEq(nftmarket.balanceOf(address(3)),1);
     }
 }

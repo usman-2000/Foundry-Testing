@@ -46,7 +46,9 @@ contract NFTMarket is ERC721URIStorage, Ownable {
      require(msg.value == listing.price, "NFTMarket: incorrect price");
      ERC721(address(this)).transferFrom(address(this), msg.sender, tokenID);
      clearListing(tokenID);
-     payable(listing.seller).transfer(listing.price.mul(95).div(100));
+
+     // transfer funds k function per error hai.......
+    //  payable(listing.seller).transfer(listing.price.mul(95).div(100));
      emit NFTTransfer(tokenID, address(this), msg.sender, "", 0);
   }
 
