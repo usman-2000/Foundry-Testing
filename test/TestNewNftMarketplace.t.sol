@@ -7,5 +7,11 @@ import "../src/NewNftMarketplace.sol";
 contract TestNFTMarket is Test{
     NFTMarket nftmarket;
 
-    function setUp() public{}
+    function setUp() public{
+        nftmarket = new NFTMarket();
+    }
+
+    function testCreatingToken() public{
+        
+    }
 }
