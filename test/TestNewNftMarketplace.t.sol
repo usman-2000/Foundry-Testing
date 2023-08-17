@@ -33,6 +33,7 @@ contract TestNFTMarket is Test {
         assertEq(nftmarket.balanceOf(address(1)),0);
     }
 
+    // The listing of this specific seller of specific token id will be cancel
     function testCancelListing() public {
         vm.prank(address(1));
         nftmarket.createNFT("TokenUri");
@@ -41,6 +42,18 @@ contract TestNFTMarket is Test {
         nftmarket.listNFT(1, 1 ether);
         vm.prank(address(1));
         // cancel the listed Nft
+        nftmarket.cancelListing(1);
+    }
+
+    // This will fail because the address who cancel this listing is not the actual seller.
+    function testFailCancelListing() public{
+        vm.prank(address(1));
+        nftmarket.createNFT("TokenUri");
+        vm.prank(address(1));
+        // listing the nft on the marketplace
+        nftmarket.listNFT(1, 1 ether);
+        vm.prank(address(2));
+        // can't cancel the listing of token id 1 because this address is not the seller
         nftmarket.cancelListing(1);
     }
 
