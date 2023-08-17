@@ -7,6 +7,7 @@ import "openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
 
 contract NFT is ERC721URIStorage {
     using Counters for Counters.Counter;
+
     Counters.Counter private _tokenIds;
 
     mapping(address => uint256[]) private balance;
