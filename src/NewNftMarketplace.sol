@@ -64,7 +64,7 @@ contract NFTMarket is ERC721URIStorage, Ownable {
         emit NFTTransfer(tokenID, address(this), msg.sender, "", 0);
     }
 
-    function withdrawFunds() public onlyOwner {
+    function withdrawFunds() public {
         uint256 balance = address(this).balance;
         require(balance > 0, "NFTMarket: balance is zero");
         // payable(msg.sender).transfer(balance);

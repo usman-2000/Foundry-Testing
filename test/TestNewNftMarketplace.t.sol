@@ -14,6 +14,8 @@ contract TestNFTMarket is Test {
     function testCreatingToken() public {
         vm.prank(address(1));
         nftmarket.createNFT("TokenUri");
+        // address(1) balance should be 1 as it created a new nft
+        assertEq(nftmarket.balanceOf(address(1)),1);
         vm.prank(address(1));
         nftmarket.listNFT(1, 1 ether);
         assertEq(nftmarket._tokenIDs(), 1);
@@ -21,11 +23,14 @@ contract TestNFTMarket is Test {
         nftmarket.createNFT("TokenUri1");
         assertEq(nftmarket._tokenIDs(), 2);
         vm.deal(address(3), 2 ether);
+        // address(3) will buy nft of address(1) whose tokenid is 1
         vm.prank(address(3));
         nftmarket.buyNFT{value: 1 ether}(1);
         assertEq(nftmarket.balanceOf(address(3)), 1);
-        // vm.prank(address(1));
-        // nftmarket.withdrawFunds();
+        vm.prank(address(1));
+        nftmarket.withdrawFunds();
+        // Address(1) balance should be 0
+        assertEq(nftmarket.balanceOf(address(1)),0);
     }
 
     function testCancelListing() public {
@@ -39,7 +44,7 @@ contract TestNFTMarket is Test {
         nftmarket.cancelListing(1);
     }
 
-    // test will pass because only owner can call this function
+    // test will fail because it has zero balance
     function testFailWithdrawFunds() public{
         vm.prank(address(1));
         nftmarket.withdrawFunds();
