@@ -25,4 +25,15 @@ contract TestNFTMarket is Test{
         nftmarket.buyNFT{value : 1 ether}(1);
         assertEq(nftmarket.balanceOf(address(3)),1);
     }
+
+    function testCancelListing() public{
+        vm.prank(address(1));
+        nftmarket.createNFT("TokenUri");
+        vm.prank(address(1));
+        // listing the nft on the marketplace
+        nftmarket.listNFT(1,1 ether);
+        vm.prank(address(1));
+        // cancel the listed Nft
+        nftmarket.cancelListing(1);
+    }
 }

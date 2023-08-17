@@ -12,33 +12,50 @@ contract TestMarketPlace is Test{
     }
 
     function testCreateToken() public{
+        // msg.sender for the next call will be address 1
         vm.prank(address(1));
+        // created a token 
         marketplace.createToken("tokenUri",0.01 ether);
         vm.prank(address(2));
         marketplace.createToken("tokenUri",0.01 ether);
+        // checking for the update of tokenIds counter
         assertEq(marketplace._tokenIds(),2);
-        // assertEq(marketplace.idToListedToken[1].owner,address(1));
-
-        // Here, changing the address to address(3) but it has 0 ether. So, giving it 2 ethers by vm.deal .
-
-        // vm.prank(address(3));
-        // vm.deal(address(3),2 ether);
-
-        // It is working until i do not call executeSale method. When i call it, the prank function reverts.
-
+        // created new address
         address alice = makeAddr("alice");
+        // sending 2 ethers to new address 
         vm.deal(alice,2 ether);
         vm.prank(alice);
+        // execute sale function called
         marketplace.executeSale{value: 0.01 ether}(1);
-        // assertEq(marketplace._itemsSold(),1);
-        assertEq(marketplace.balanceOf(alice),0);
+        // itemSold will be increase due to sale
+        assertEq(marketplace._itemsSold(),1);
+        // checking the balance of smart contract
+        assertEq(marketplace.balanceOf(alice),1);
+        vm.prank(alice);
+        // checking balance of alice address
+        assertEq(marketplace.balanceOf(alice),1);
+
     }
 
-    // function testFailLowListPrice() public{
-    //     vm.prank(address(1));
-    //     marketplace.createToken("tokenUri",0.001 ether);
+    // When sending price for listing is less than tha actual listing price
+    function testFailLowListPrice() public{
+        vm.prank(address(1));
+        marketplace.createToken("tokenUri",0.001 ether);
 
-    // }
+    }
+
+    // This test will fail because only owner can update the list price
+    function testFailUpdateListPrice() public{
+        vm.prank(address(1));
+        marketplace.updateListPrice(0.22 ether);
+    }
+
+    // This function passes because the msg.sender will be the owner of the contract
+    function testUpdateListPrice() public{
+        marketplace.updateListPrice(0.22 ether);
+        assertEq(marketplace.listPrice(),0.22 ether);
+
+    }
 
     
 }
